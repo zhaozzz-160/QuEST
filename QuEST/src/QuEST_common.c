@@ -1,3 +1,27 @@
+/*
+  DEBUGGING: disabling intel compiler warnings
+*/
+// can't inline
+#pragma warning (disable : 4711) 
+// has inlined
+#pragma warning (disable : 4710)
+// preprocessor macro undefined
+#pragma warning (disable : 4668)
+// struct fields byte-padded
+#pragma warning (disable : 4820)
+// C99-valid int[3] = {1,2,3} init
+#pragma warning (disable : 4204)
+// use of deprecated sprintf (in lieu of sprintf_s) etc
+#pragma warning (disable : 4996)
+// void function returning value (for code concision)
+#pragma warning (disable : 4098)
+// unreferenced formal parameter
+#pragma warning (disable : 4100)
+// Spectre mitigation
+#pragma warning (disable : 5045)
+
+
+
 // Distributed under MIT licence. See https://github.com/QuEST-Kit/QuEST/blob/master/LICENCE.txt for details
 
 /** @file
