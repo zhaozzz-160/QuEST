@@ -40,7 +40,7 @@ typedef struct {
  */
 typedef struct ComplexArray
 {
-    qreal *real; 
+    qreal *real;
     qreal *imag;
 } ComplexArray;
 
@@ -97,12 +97,12 @@ typedef struct Qureg
     int numChunks;
     
     //! Computational state amplitudes - a subset thereof in the MPI version
-    ComplexArray stateVec; 
+    Complex *stateVec; 
     //! Temporary storage for a chunk of the state vector received from another process in the MPI version
-    ComplexArray pairStateVec;
+    Complex *pairStateVec;
     
     //! Storage for wavefunction amplitudes in the GPU version
-    ComplexArray deviceStateVec;
+    Complex *deviceStateVec;
     //! Storage for reduction of probabilities on GPU
     qreal *firstLevelReduction, *secondLevelReduction;
 
