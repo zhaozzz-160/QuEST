@@ -173,9 +173,9 @@ void reportState(Qureg qureg){
 
     for(index=0; index<qureg.numAmpsPerChunk; index++){
         # if QuEST_PREC==1 || QuEST_PREC==2
-        fprintf(state, "%.12f, %.12f\n", qureg.stateVec.real[index], qureg.stateVec.imag[index]);
+        fprintf(state, "%.12f, %.12f\n", qureg.stateVec[index].real, qureg.stateVec[index].imag);
         # elif QuEST_PREC == 4
-        fprintf(state, "%.12Lf, %.12Lf\n", qureg.stateVec.real[index], qureg.stateVec.imag[index]);
+        fprintf(state, "%.12Lf, %.12Lf\n", qureg.stateVec[index].real, qureg.stateVec[index].imag);
         #endif
     }
     fclose(state);

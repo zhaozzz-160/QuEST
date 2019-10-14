@@ -58,19 +58,16 @@ qreal densmatr_calcPurity(Qureg qureg) {
 qreal densmatr_calcFidelity(Qureg qureg, Qureg pureState) {
     
     // save pointers to qureg's pair state
-    qreal* quregPairRePtr = qureg.pairStateVec.real;
-    qreal* quregPairImPtr = qureg.pairStateVec.imag;
+    Complex* quregPairPtr = qureg.pairStateVec;
     
     // populate qureg pair state with pure state (by repointing)
-    qureg.pairStateVec.real = pureState.stateVec.real;
-    qureg.pairStateVec.imag = pureState.stateVec.imag;
+    qureg.pairStateVec = pureState.stateVec;
     
     // calculate fidelity using pairState
     qreal fid = densmatr_calcFidelityLocal(qureg, pureState);
     
     // restore pointers
-    qureg.pairStateVec.real = quregPairRePtr;
-    qureg.pairStateVec.imag = quregPairImPtr;
+    qureg.pairStateVec = quregPairPtr;
     
     return fid;
 }
@@ -78,19 +75,16 @@ qreal densmatr_calcFidelity(Qureg qureg, Qureg pureState) {
 void densmatr_initPureState(Qureg qureg, Qureg pureState) {
     
     // save pointers to qureg's pair state
-    qreal* quregPairRePtr = qureg.pairStateVec.real;
-    qreal* quregPairImPtr = qureg.pairStateVec.imag;
+    Complex* quregPairPtr = qureg.pairStateVec;
     
     // populate qureg pair state with pure state (by repointing)
-    qureg.pairStateVec.real = pureState.stateVec.real;
-    qureg.pairStateVec.imag = pureState.stateVec.imag;
+    qureg.pairStateVec = pureState.stateVec;
 
-    // populate density matrix via it's pairState
+    // populate density matrix via its pairState
     densmatr_initPureStateLocal(qureg, pureState);
     
     // restore pointers
-    qureg.pairStateVec.real = quregPairRePtr;
-    qureg.pairStateVec.imag = quregPairImPtr;
+    qureg.pairStateVec = quregPairPtr;
 }
 
 Complex statevec_calcInnerProduct(Qureg bra, Qureg ket) {
@@ -109,7 +103,7 @@ qreal densmatr_calcTotalProb(Qureg qureg) {
     
     for (int col=0; col< numCols; col++) {
         diagIndex = col*(numCols + 1);
-        y = qureg.stateVec.real[diagIndex] - c;
+        y = qureg.stateVec[diagIndex].real - c;
         t = pTotal + y;
         c = ( t - pTotal ) - y; // brackets are important
         pTotal = t;
@@ -129,17 +123,17 @@ qreal statevec_calcTotalProb(Qureg qureg){
     long long int numAmpsPerRank = qureg.numAmpsPerChunk;
     c = 0.0;
     for (index=0; index<numAmpsPerRank; index++){ 
-        // Perform pTotal+=qureg.stateVec.real[index]*qureg.stateVec.real[index]; by Kahan
+        // Perform pTotal+=qureg.stateVec[index].real*qureg.stateVec[index].real; by Kahan
 
-        y = qureg.stateVec.real[index]*qureg.stateVec.real[index] - c;
+        y = qureg.stateVec[index].real*qureg.stateVec[index].real - c;
         t = pTotal + y;
         // Don't change the bracketing on the following line
         c = ( t - pTotal ) - y;
         pTotal = t;
 
-        // Perform pTotal+=qureg.stateVec.imag[index]*qureg.stateVec.imag[index]; by Kahan
+        // Perform pTotal+=qureg.stateVec[index].imag*qureg.stateVec[index].imag; by Kahan
 
-        y = qureg.stateVec.imag[index]*qureg.stateVec.imag[index] - c;
+        y = qureg.stateVec[index].imag*qureg.stateVec[index].imag - c;
         t = pTotal + y;
         // Don't change the bracketing on the following line
         c = ( t - pTotal ) - y;
@@ -189,11 +183,11 @@ void reportQuESTEnv(QuESTEnv env){
 }
 
 qreal statevec_getRealAmp(Qureg qureg, long long int index){
-    return qureg.stateVec.real[index];
+    return qureg.stateVec[index].real;
 }
 
 qreal statevec_getImagAmp(Qureg qureg, long long int index){
-    return qureg.stateVec.imag[index];
+    return qureg.stateVec[index].imag;
 }
 
 void statevec_compactUnitary(Qureg qureg, const int targetQubit, Complex alpha, Complex beta) 

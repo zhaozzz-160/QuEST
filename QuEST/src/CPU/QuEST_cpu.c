@@ -57,8 +57,8 @@ void densmatr_oneQubitDegradeOffDiagonal(Qureg qureg, const int targetQubit, qre
             if ((thisPattern==innerMask) || (thisPattern==outerMask)){
                 // do dephase
                 // the lines below will degrade the off-diagonal terms |..0..><..1..| and |..1..><..0..|
-                qureg.stateVec.real[thisTask] = retain*qureg.stateVec.real[thisTask];
-                qureg.stateVec.imag[thisTask] = retain*qureg.stateVec.imag[thisTask];
+                qureg.stateVec[thisTask].real = retain*qureg.stateVec[thisTask].real;
+                qureg.stateVec[thisTask].imag = retain*qureg.stateVec[thisTask].imag;
             }
         }
     }
@@ -108,8 +108,8 @@ void densmatr_twoQubitDephase(Qureg qureg, const int qubit1, const int qubit2, q
                     (thisPatternQubit2==innerMaskQubit2) || (thisPatternQubit2==outerMaskQubit2) ){
                 // do dephase
                 // the lines below will degrade the off-diagonal terms |..0..><..1..| and |..1..><..0..|
-                qureg.stateVec.real[thisTask] = retain*qureg.stateVec.real[thisTask];
-                qureg.stateVec.imag[thisTask] = retain*qureg.stateVec.imag[thisTask];
+                qureg.stateVec[thisTask].real = retain*qureg.stateVec[thisTask].real;
+                qureg.stateVec[thisTask].imag = retain*qureg.stateVec[thisTask].imag;
             }
         }
     }
@@ -144,20 +144,20 @@ void densmatr_oneQubitDepolariseLocal(Qureg qureg, const int targetQubit, qreal 
             if ((thisPattern==innerMask) || (thisPattern==outerMask)){
                 // do dephase
                 // the lines below will degrade the off-diagonal terms |..0..><..1..| and |..1..><..0..|
-                qureg.stateVec.real[thisTask] = retain*qureg.stateVec.real[thisTask];
-                qureg.stateVec.imag[thisTask] = retain*qureg.stateVec.imag[thisTask];
+                qureg.stateVec[thisTask].real = retain*qureg.stateVec[thisTask].real;
+                qureg.stateVec[thisTask].imag = retain*qureg.stateVec[thisTask].imag;
             } else {
                 if ((thisTask&totMask)==0){ //this element relates to targetQubit in state 0
                     // do depolarise
                     partner = thisTask | totMask;
-                    realAv =  (qureg.stateVec.real[thisTask] + qureg.stateVec.real[partner]) /2 ;
-                    imagAv =  (qureg.stateVec.imag[thisTask] + qureg.stateVec.imag[partner]) /2 ;
+                    realAv =  (qureg.stateVec[thisTask].real + qureg.stateVec[partner].real) /2 ;
+                    imagAv =  (qureg.stateVec[thisTask].imag + qureg.stateVec[partner].imag) /2 ;
 
-                    qureg.stateVec.real[thisTask] = retain*qureg.stateVec.real[thisTask] + depolLevel*realAv;
-                    qureg.stateVec.imag[thisTask] = retain*qureg.stateVec.imag[thisTask] + depolLevel*imagAv;
+                    qureg.stateVec[thisTask].real = retain*qureg.stateVec[thisTask].real + depolLevel*realAv;
+                    qureg.stateVec[thisTask].imag = retain*qureg.stateVec[thisTask].imag + depolLevel*imagAv;
 
-                    qureg.stateVec.real[partner] = retain*qureg.stateVec.real[partner] + depolLevel*realAv;
-                    qureg.stateVec.imag[partner] = retain*qureg.stateVec.imag[partner] + depolLevel*imagAv;
+                    qureg.stateVec[partner].real = retain*qureg.stateVec[partner].real + depolLevel*realAv;
+                    qureg.stateVec[partner].imag = retain*qureg.stateVec[partner].imag + depolLevel*imagAv;
                 }
             }
         }
@@ -194,20 +194,20 @@ void densmatr_oneQubitDampingLocal(Qureg qureg, const int targetQubit, qreal dam
             if ((thisPattern==innerMask) || (thisPattern==outerMask)){
                 // do dephase
                 // the lines below will degrade the off-diagonal terms |..0..><..1..| and |..1..><..0..|
-                qureg.stateVec.real[thisTask] = dephase*qureg.stateVec.real[thisTask];
-                qureg.stateVec.imag[thisTask] = dephase*qureg.stateVec.imag[thisTask];
+                qureg.stateVec[thisTask].real = dephase*qureg.stateVec[thisTask].real;
+                qureg.stateVec[thisTask].imag = dephase*qureg.stateVec[thisTask].imag;
             } else {
                 if ((thisTask&totMask)==0){ //this element relates to targetQubit in state 0
                     // do depolarise
                     partner = thisTask | totMask;
-                    //realAv =  (qureg.stateVec.real[thisTask] + qureg.stateVec.real[partner]) /2 ;
-                    //imagAv =  (qureg.stateVec.imag[thisTask] + qureg.stateVec.imag[partner]) /2 ;
+                    //realAv =  (qureg.stateVec[thisTask].real + qureg.stateVec[partner].real) /2 ;
+                    //imagAv =  (qureg.stateVec[thisTask].imag + qureg.stateVec[partner].imag) /2 ;
 
-                    qureg.stateVec.real[thisTask] = qureg.stateVec.real[thisTask] + damping*qureg.stateVec.real[partner];
-                    qureg.stateVec.imag[thisTask] = qureg.stateVec.imag[thisTask] + damping*qureg.stateVec.imag[partner];
+                    qureg.stateVec[thisTask].real = qureg.stateVec[thisTask].real + damping*qureg.stateVec[partner].real;
+                    qureg.stateVec[thisTask].imag = qureg.stateVec[thisTask].imag + damping*qureg.stateVec[partner].imag;
 
-                    qureg.stateVec.real[partner] = retain*qureg.stateVec.real[partner];
-                    qureg.stateVec.imag[partner] = retain*qureg.stateVec.imag[partner];
+                    qureg.stateVec[partner].real = retain*qureg.stateVec[partner].real;
+                    qureg.stateVec[partner].imag = retain*qureg.stateVec[partner].imag;
                 }
             }
         }
@@ -280,11 +280,11 @@ void densmatr_oneQubitDepolariseDistributed(Qureg qureg, const int targetQubit, 
 
             // state[thisIndex] = (1-depolLevel)*state[thisIndex] + depolLevel*(state[thisIndex]
             //      + pair[thisTask])/2
-            qureg.stateVec.real[thisIndex] = (1-depolLevel)*qureg.stateVec.real[thisIndex] +
-                    depolLevel*(qureg.stateVec.real[thisIndex] + qureg.pairStateVec.real[thisTask])/2;
+            qureg.stateVec[thisIndex].real = (1-depolLevel)*qureg.stateVec[thisIndex].real +
+                    depolLevel*(qureg.stateVec[thisIndex].real + qureg.pairStateVec[thisTask].real)/2;
 
-            qureg.stateVec.imag[thisIndex] = (1-depolLevel)*qureg.stateVec.imag[thisIndex] +
-                    depolLevel*(qureg.stateVec.imag[thisIndex] + qureg.pairStateVec.imag[thisTask])/2;
+            qureg.stateVec[thisIndex].imag = (1-depolLevel)*qureg.stateVec[thisIndex].imag +
+                    depolLevel*(qureg.stateVec[thisIndex].imag + qureg.pairStateVec[thisTask].imag)/2;
         }
     }
 }
@@ -361,15 +361,15 @@ void densmatr_oneQubitDampingDistributed(Qureg qureg, const int targetQubit, qre
             // state[thisIndex] = (1-depolLevel)*state[thisIndex] + depolLevel*(state[thisIndex]
             //      + pair[thisTask])/2
             if(stateBit == 0){
-                qureg.stateVec.real[thisIndex] = qureg.stateVec.real[thisIndex] +
-                    damping*( qureg.pairStateVec.real[thisTask]);
+                qureg.stateVec[thisIndex].real = qureg.stateVec[thisIndex].real +
+                    damping*( qureg.pairStateVec[thisTask].real);
 
-                qureg.stateVec.imag[thisIndex] = qureg.stateVec.imag[thisIndex] +
-                    damping*( qureg.pairStateVec.imag[thisTask]);
+                qureg.stateVec[thisIndex].imag = qureg.stateVec[thisIndex].imag +
+                    damping*( qureg.pairStateVec[thisTask].imag);
             } else{
-                qureg.stateVec.real[thisIndex] = retain*qureg.stateVec.real[thisIndex];
+                qureg.stateVec[thisIndex].real = retain*qureg.stateVec[thisIndex].real;
 
-                qureg.stateVec.imag[thisIndex] = retain*qureg.stateVec.imag[thisIndex];
+                qureg.stateVec[thisIndex].imag = retain*qureg.stateVec[thisIndex].imag;
             }
         }
     }
@@ -410,16 +410,16 @@ void densmatr_twoQubitDepolariseLocal(Qureg qureg, int qubit1, int qubit2, qreal
                         || (thisPatternQubit2==totMaskQubit2))){
                 //this element of form |...X...0...><...X...0...|  for X either 0 or 1.
                 partner = thisTask | totMaskQubit1;
-                real00 =  qureg.stateVec.real[thisTask];
-                imag00 =  qureg.stateVec.imag[thisTask];
+                real00 =  qureg.stateVec[thisTask].real;
+                imag00 =  qureg.stateVec[thisTask].imag;
 
-                qureg.stateVec.real[thisTask] = qureg.stateVec.real[thisTask]
-                    + delta*qureg.stateVec.real[partner];
-                qureg.stateVec.imag[thisTask] = qureg.stateVec.imag[thisTask]
-                    + delta*qureg.stateVec.imag[partner];
+                qureg.stateVec[thisTask].real = qureg.stateVec[thisTask].real
+                    + delta*qureg.stateVec[partner].real;
+                qureg.stateVec[thisTask].imag = qureg.stateVec[thisTask].imag
+                    + delta*qureg.stateVec[partner].imag;
 
-                qureg.stateVec.real[partner] = qureg.stateVec.real[partner] + delta*real00;
-                qureg.stateVec.imag[partner] = qureg.stateVec.imag[partner] + delta*imag00;
+                qureg.stateVec[partner].real = qureg.stateVec[partner].real + delta*real00;
+                qureg.stateVec[partner].imag = qureg.stateVec[partner].imag + delta*imag00;
 
             }
         }
@@ -434,16 +434,16 @@ void densmatr_twoQubitDepolariseLocal(Qureg qureg, int qubit1, int qubit2, qreal
                         || (thisPatternQubit1==totMaskQubit1))){
                 //this element of form |...0...X...><...0...X...|  for X either 0 or 1.
                 partner = thisTask | totMaskQubit2;
-                real00 =  qureg.stateVec.real[thisTask];
-                imag00 =  qureg.stateVec.imag[thisTask];
+                real00 =  qureg.stateVec[thisTask].real;
+                imag00 =  qureg.stateVec[thisTask].imag;
 
-                qureg.stateVec.real[thisTask] = qureg.stateVec.real[thisTask]
-                    + delta*qureg.stateVec.real[partner];
-                qureg.stateVec.imag[thisTask] = qureg.stateVec.imag[thisTask]
-                    + delta*qureg.stateVec.imag[partner];
+                qureg.stateVec[thisTask].real = qureg.stateVec[thisTask].real
+                    + delta*qureg.stateVec[partner].real;
+                qureg.stateVec[thisTask].imag = qureg.stateVec[thisTask].imag
+                    + delta*qureg.stateVec[partner].imag;
 
-                qureg.stateVec.real[partner] = qureg.stateVec.real[partner] + delta*real00;
-                qureg.stateVec.imag[partner] = qureg.stateVec.imag[partner] + delta*imag00;
+                qureg.stateVec[partner].real = qureg.stateVec[partner].real + delta*real00;
+                qureg.stateVec[partner].imag = qureg.stateVec[partner].imag + delta*imag00;
 
             }
         }
@@ -460,17 +460,17 @@ void densmatr_twoQubitDepolariseLocal(Qureg qureg, int qubit1, int qubit2, qreal
                 //this element of form |...0...X...><...0...X...|  for X either 0 or 1.
                 partner = thisTask | totMaskQubit2;
                 partner = partner ^ totMaskQubit1;
-                real00 =  qureg.stateVec.real[thisTask];
-                imag00 =  qureg.stateVec.imag[thisTask];
+                real00 =  qureg.stateVec[thisTask].real;
+                imag00 =  qureg.stateVec[thisTask].imag;
 
-                qureg.stateVec.real[thisTask] = gamma * (qureg.stateVec.real[thisTask]
-                        + delta*qureg.stateVec.real[partner]);
-                qureg.stateVec.imag[thisTask] = gamma * (qureg.stateVec.imag[thisTask]
-                        + delta*qureg.stateVec.imag[partner]);
+                qureg.stateVec[thisTask].real = gamma * (qureg.stateVec[thisTask].real
+                        + delta*qureg.stateVec[partner].real);
+                qureg.stateVec[thisTask].imag = gamma * (qureg.stateVec[thisTask].imag
+                        + delta*qureg.stateVec[partner].imag);
 
-                qureg.stateVec.real[partner] = gamma * (qureg.stateVec.real[partner]
+                qureg.stateVec[partner].real = gamma * (qureg.stateVec[partner].real
                         + delta*real00);
-                qureg.stateVec.imag[partner] = gamma * (qureg.stateVec.imag[partner]
+                qureg.stateVec[partner].imag = gamma * (qureg.stateVec[partner].imag
                         + delta*imag00);
 
             }
@@ -515,16 +515,16 @@ void densmatr_twoQubitDepolariseLocalPart1(Qureg qureg, int qubit1, int qubit2, 
                         || (thisPatternQubit2==totMaskQubit2))){
                 //this element of form |...X...0...><...X...0...|  for X either 0 or 1.
                 partner = thisTask | totMaskQubit1;
-                real00 =  qureg.stateVec.real[thisTask];
-                imag00 =  qureg.stateVec.imag[thisTask];
+                real00 =  qureg.stateVec[thisTask].real;
+                imag00 =  qureg.stateVec[thisTask].imag;
 
-                qureg.stateVec.real[thisTask] = qureg.stateVec.real[thisTask]
-                    + delta*qureg.stateVec.real[partner];
-                qureg.stateVec.imag[thisTask] = qureg.stateVec.imag[thisTask]
-                    + delta*qureg.stateVec.imag[partner];
+                qureg.stateVec[thisTask].real = qureg.stateVec[thisTask].real
+                    + delta*qureg.stateVec[partner].real;
+                qureg.stateVec[thisTask].imag = qureg.stateVec[thisTask].imag
+                    + delta*qureg.stateVec[partner].imag;
 
-                qureg.stateVec.real[partner] = qureg.stateVec.real[partner] + delta*real00;
-                qureg.stateVec.imag[partner] = qureg.stateVec.imag[partner] + delta*imag00;
+                qureg.stateVec[partner].real = qureg.stateVec[partner].real + delta*real00;
+                qureg.stateVec[partner].imag = qureg.stateVec[partner].imag + delta*imag00;
 
             }
         }
@@ -614,10 +614,10 @@ void densmatr_twoQubitDepolariseDistributed(Qureg qureg, const int targetQubit,
             // state[thisIndex] = (1-depolLevel)*state[thisIndex] + depolLevel*(state[thisIndex]
             //      + pair[thisTask])/2
             // NOTE: must set gamma=1 if using this function for steps 1 or 2
-            qureg.stateVec.real[thisIndex] = gamma*(qureg.stateVec.real[thisIndex] +
-                    delta*qureg.pairStateVec.real[thisTask]);
-            qureg.stateVec.imag[thisIndex] = gamma*(qureg.stateVec.imag[thisIndex] +
-                    delta*qureg.pairStateVec.imag[thisTask]);
+            qureg.stateVec[thisIndex].real = gamma*(qureg.stateVec[thisIndex].real +
+                    delta*qureg.pairStateVec[thisTask].real);
+            qureg.stateVec[thisIndex].imag = gamma*(qureg.stateVec[thisIndex].imag +
+                    delta*qureg.pairStateVec[thisTask].imag);
         }
     }
 }
@@ -712,11 +712,11 @@ void densmatr_twoQubitDepolariseQ1LocalQ2DistributedPart3(Qureg qureg, const int
 
             // state[thisIndex] = (1-depolLevel)*state[thisIndex] + depolLevel*(state[thisIndex]
             //      + pair[thisIndexInPairVector])/2
-            qureg.stateVec.real[thisIndex] = gamma*(qureg.stateVec.real[thisIndex] +
-                    delta*qureg.pairStateVec.real[thisIndexInPairVector]);
+            qureg.stateVec[thisIndex].real = gamma*(qureg.stateVec[thisIndex].real +
+                    delta*qureg.pairStateVec[thisIndexInPairVector].real);
 
-            qureg.stateVec.imag[thisIndex] = gamma*(qureg.stateVec.imag[thisIndex] +
-                    delta*qureg.pairStateVec.imag[thisIndexInPairVector]);
+            qureg.stateVec[thisIndex].imag = gamma*(qureg.stateVec[thisIndex].imag +
+                    delta*qureg.pairStateVec[thisIndexInPairVector].imag);
         }
     }
 
@@ -730,8 +730,8 @@ void zeroSomeAmps(Qureg qureg, long long int startInd, long long int numAmps) {
 # pragma omp parallel for schedule (static)
 # endif
     for (long long int i=startInd; i < startInd+numAmps; i++) {
-        qureg.stateVec.real[i] = 0;
-        qureg.stateVec.imag[i] = 0;
+        qureg.stateVec[i].real = 0;
+        qureg.stateVec[i].imag = 0;
     }
 }
 void normaliseSomeAmps(Qureg qureg, qreal norm, long long int startInd, long long int numAmps) {
@@ -740,8 +740,8 @@ void normaliseSomeAmps(Qureg qureg, qreal norm, long long int startInd, long lon
 # pragma omp parallel for schedule (static)
 # endif
     for (long long int i=startInd; i < startInd+numAmps; i++) {
-        qureg.stateVec.real[i] /= norm;
-        qureg.stateVec.imag[i] /= norm;
+        qureg.stateVec[i].real /= norm;
+        qureg.stateVec[i].imag /= norm;
     }
 }
 void alternateNormZeroingSomeAmpBlocks(
@@ -992,7 +992,7 @@ Complex statevec_calcInnerProductLocal(Qureg bra, Qureg ket) {
 # pragma omp parallel \
     shared    (bra, ket, numAmps)    \
     private   (index, braRe, braIm, ketRe, ketIm) \
-    reduction ( +:innerPro.real, innerPro.imag )
+    reduction ( +:innerProdReal, innerProdImag )
 # endif
     {
 # ifdef _OPENMP
@@ -1005,14 +1005,14 @@ Complex statevec_calcInnerProductLocal(Qureg bra, Qureg ket) {
             ketIm = ket.stateVec[index].imag;
 
             // conj(bra_i) * ket_i
-            innerPro.real += braRe*ketRe + braIm*ketIm;
-            innerPro.imag += braRe*ketIm - braIm*ketRe;
+            innerProdReal += braRe*ketRe + braIm*ketIm;
+            innerProdImag += braRe*ketIm - braIm*ketRe;
         }
     }
 
     Complex innerProd;
-    innerProd.real = innerPro.real;
-    innerProd.imag = innerPro.imag;
+    innerProd.real = innerProdReal;
+    innerProd.imag = innerProdImag;
     return innerProd;
 }
 
@@ -1171,21 +1171,17 @@ void statevec_createQureg(Qureg *qureg, int numQubits, QuESTEnv env)
     long long int numAmps = 1L << numQubits;
     long long int numAmpsPerRank = numAmps/env.numRanks;
 
-    qureg->stateVec.real = malloc(numAmpsPerRank * sizeof(*(qureg->stateVec.real)));
-    qureg->stateVec.imag = malloc(numAmpsPerRank * sizeof(*(qureg->stateVec.imag)));
+    qureg->stateVec = malloc(numAmpsPerRank * sizeof(*(qureg->stateVec)));
     if (env.numRanks>1){
-        qureg->pairStateVec.real = malloc(numAmpsPerRank * sizeof(*(qureg->pairStateVec.real)));
-        qureg->pairStateVec.imag = malloc(numAmpsPerRank * sizeof(*(qureg->pairStateVec.imag)));
+        qureg->pairStateVec = malloc(numAmpsPerRank * sizeof(*(qureg->pairStateVec)));
     }
 
-    if ( (!(qureg->stateVec.real) || !(qureg->stateVec.imag))
-            && numAmpsPerRank ) {
+    if ( (!(qureg->stateVec) && numAmpsPerRank ) ) {
         printf("Could not allocate memory!");
         exit (EXIT_FAILURE);
     }
 
-    if ( env.numRanks>1 && (!(qureg->pairStateVec.real) || !(qureg->pairStateVec.imag))
-            && numAmpsPerRank ) {
+    if ( env.numRanks>1 && (!(qureg->pairStateVec) && numAmpsPerRank ) ) {
         printf("Could not allocate memory!");
         exit (EXIT_FAILURE);
     }
@@ -1204,16 +1200,12 @@ void statevec_destroyQureg(Qureg qureg, QuESTEnv env){
     qureg.numAmpsTotal = 0;
     qureg.numAmpsPerChunk = 0;
 
-    free(qureg.stateVec.real);
-    free(qureg.stateVec.imag);
+    free(qureg.stateVec);
     if (env.numRanks>1){
-        free(qureg.pairStateVec.real);
-        free(qureg.pairStateVec.imag);
+        free(qureg.pairStateVec);
     }
-    qureg.stateVec.real = NULL;
-    qureg.stateVec.imag = NULL;
-    qureg.pairStateVec.real = NULL;
-    qureg.pairStateVec.imag = NULL;
+    qureg.stateVec = NULL;
+    qureg.pairStateVec = NULL;
 }
 
 void statevec_reportStateToScreen(Qureg qureg, QuESTEnv env, int reportRank){
@@ -1231,8 +1223,8 @@ void statevec_reportStateToScreen(Qureg qureg, QuESTEnv env, int reportRank){
                 }
 
                 for(index=0; index<qureg.numAmpsPerChunk; index++){
-                    //printf(REAL_STRING_FORMAT ", " REAL_STRING_FORMAT "\n", qureg.pairStateVec.real[index], qureg.pairStateVec.imag[index]);
-                    printf(REAL_STRING_FORMAT ", " REAL_STRING_FORMAT "\n", qureg.stateVec.real[index], qureg.stateVec.imag[index]);
+                    //printf(REAL_STRING_FORMAT ", " REAL_STRING_FORMAT "\n", qureg.pairStateVec[index].real, qureg.pairStateVec[index].imag);
+                    printf(REAL_STRING_FORMAT ", " REAL_STRING_FORMAT "\n", qureg.stateVec[index].real, qureg.stateVec[index].imag);
                 }
                 if (reportRank || rank==qureg.numChunks-1) printf("]\n");
             }
@@ -1277,8 +1269,8 @@ void statevec_initZeroState (Qureg qureg)
 
     if (qureg.chunkId==0){
         // zero state |0000..0000> has probability 1
-        stateVecReal[0] = 1.0;
-        stateVecImag[0] = 0.0;
+        qureg.stateVec[0].real = 0.0;
+        qureg.stateVec[0].imag = 0.0;
     }
 }
 
@@ -1355,17 +1347,11 @@ void statevec_cloneQureg(Qureg targetQureg, Qureg copyQureg) {
     // dimension of the state vector
     stateVecSize = targetQureg.numAmpsPerChunk;
 
-    // Can't use qureg->stateVec as a private OMP var
-    qreal *targetStateVecReal = targetQureg.stateVec.real;
-    qreal *targetStateVecImag = targetQureg.stateVec.imag;
-    qreal *copyStateVecReal = copyQureg.stateVec.real;
-    qreal *copyStateVecImag = copyQureg.stateVec.imag;
-
     // initialise the state to |0000..0000>
 # ifdef _OPENMP
 # pragma omp parallel \
     default  (none) \
-    shared   (stateVecSize, targetStateVecReal, targetStateVecImag, copyStateVecReal, copyStateVecImag) \
+    shared   (targetQureg, copyQureg, stateVecSize) \
     private  (index)
 # endif
     {
@@ -1373,8 +1359,8 @@ void statevec_cloneQureg(Qureg targetQureg, Qureg copyQureg) {
 # pragma omp for schedule (static)
 # endif
         for (index=0; index<stateVecSize; index++) {
-            targetStateVecReal[index] = copyStateVecReal[index];
-            targetStateVecImag[index] = copyStateVecImag[index];
+            targetQureg.stateVec[index].real = copyQureg.stateVec[index].real;
+            targetQureg.stateVec[index].imag = copyQureg.stateVec[index].imag;
         }
     }
 }
@@ -1413,11 +1399,11 @@ void statevec_initStateOfSingleQubit(Qureg *qureg, int qubitId, int outcome)
         for (index=0; index<chunkSize; index++) {
             bit = extractBit(qubitId, index+chunkId*chunkSize);
             if (bit==outcome) {
-                qureg.stateVec[index].real = normFactor;
-                qureg.stateVec[index].imag = 0.0;
+                qureg->stateVec[index].real = normFactor;
+                qureg->stateVec[index].imag = 0.0;
             } else {
-                qureg.stateVec[index].real = 0.0;
-                qureg.stateVec[index].imag = 0.0;
+                qureg->stateVec[index].real = 0.0;
+                qureg->stateVec[index].imag = 0.0;
             }
         }
     }
@@ -1486,14 +1472,14 @@ int statevec_initStateFromSingleFile(Qureg *qureg, char filename[200], QuESTEnv 
                     int chunkId = totalIndex/chunkSize;
                     if (chunkId==qureg->chunkId){
                         # if QuEST_PREC==1
-                        sscanf(line, "%f, %f", &(stateVecReal[indexInChunk]),
-                                &(stateVecImag[indexInChunk]));
+                        sscanf(line, "%f, %f", &(qureg->stateVec[indexInChunk].real),
+                                &(qureg->stateVec[indexInChunk].imag));
                         # elif QuEST_PREC==2
-                        sscanf(line, "%lf, %lf", &(stateVecReal[indexInChunk]),
-                                &(stateVecImag[indexInChunk]));
+                        sscanf(line, "%lf, %lf", &(qureg->stateVec[indexInChunk].real),
+                                &(qureg->stateVec[indexInChunk].imag));
                         # elif QuEST_PREC==4
-                        sscanf(line, "%Lf, %Lf", &(stateVecReal[indexInChunk]),
-                                &(stateVecImag[indexInChunk]));
+                        sscanf(line, "%Lf, %Lf", &(qureg->stateVec[indexInChunk].real),
+                                &(qureg->stateVec[indexInChunk].imag));
                         # endif
                         indexInChunk += 1;
                     }
@@ -1514,9 +1500,9 @@ int statevec_compareStates(Qureg mq1, Qureg mq2, qreal precision){
     int chunkSize = mq1.numAmpsPerChunk;
 
     for (int i=0; i<chunkSize; i++){
-        diff = absReal(mq1.stateVec.real[i] - mq2.stateVec.real[i]);
+        diff = absReal(mq1.stateVec[i].real - mq2.stateVec[i].real);
         if (diff>precision) return 0;
-        diff = absReal(mq1.stateVec.imag[i] - mq2.stateVec.imag[i]);
+        diff = absReal(mq1.stateVec[i].imag - mq2.stateVec[i].imag);
         if (diff>precision) return 0;
     }
     return 1;
@@ -2147,8 +2133,8 @@ void statevec_pauliXLocal(Qureg qureg, const int targetQubit)
             stateRealUp = qureg.stateVec[indexUp].real;
             stateImagUp = qureg.stateVec[indexUp].imag;
 
-            qureg.stateVec[indexUp] = qureg.stateVec[indexLo].real.real;
-            qureg.stateVec[indexUp] = qureg.stateVec[indexLo].imag.imag;
+            qureg.stateVec[indexUp].real = qureg.stateVec[indexLo].real;
+            qureg.stateVec[indexUp].imag = qureg.stateVec[indexLo].imag;
 
             qureg.stateVec[indexLo].real = stateRealUp;
             qureg.stateVec[indexLo].imag = stateImagUp;
@@ -2190,8 +2176,8 @@ void statevec_pauliXDistributed (Qureg qureg, const int targetQubit,
 # pragma omp for schedule (static)
 # endif
         for (thisTask=0; thisTask<numTasks; thisTask++) {
-            stateVecOut[thisTask] = stateVecRealIn[thisTask].real;
-            stateVecOut[thisTask] = stateVecImagIn[thisTask].imag;
+            stateVecOut[thisTask].real = stateVecIn[thisTask].real;
+            stateVecOut[thisTask].imag = stateVecIn[thisTask].imag;
         }
     }
 }
@@ -2236,8 +2222,8 @@ void statevec_controlledNotLocal(Qureg qureg, const int controlQubit, const int 
                 stateRealUp = qureg.stateVec[indexUp].real;
                 stateImagUp = qureg.stateVec[indexUp].imag;
 
-                qureg.stateVec[indexUp] = qureg.stateVec[indexLo].real.real;
-                qureg.stateVec[indexUp] = qureg.stateVec[indexLo].imag.imag;
+                qureg.stateVec[indexUp].real = qureg.stateVec[indexLo].real;
+                qureg.stateVec[indexUp].imag = qureg.stateVec[indexLo].imag;
 
                 qureg.stateVec[indexLo].real = stateRealUp;
                 qureg.stateVec[indexLo].imag = stateImagUp;
@@ -2283,8 +2269,8 @@ void statevec_controlledNotDistributed (Qureg qureg, const int controlQubit, con
         for (thisTask=0; thisTask<numTasks; thisTask++) {
             controlBit = extractBit (controlQubit, thisTask+chunkId*chunkSize);
             if (controlBit){
-                stateVecOut[thisTask] = stateVecRealIn[thisTask].real;
-                stateVecOut[thisTask] = stateVecImagIn[thisTask].imag;
+                stateVecOut[thisTask].real = stateVecIn[thisTask].real;
+                stateVecOut[thisTask].imag = stateVecIn[thisTask].imag;
             }
         }
     }
@@ -2324,8 +2310,8 @@ void statevec_pauliYLocal(Qureg qureg, const int targetQubit, const int conjFac)
             stateRealUp = qureg.stateVec[indexUp].real;
             stateImagUp = qureg.stateVec[indexUp].imag;
 
-            qureg.stateVec[indexUp] = conjFac * qureg.stateVec[indexLo].imag.real;
-            qureg.stateVec[indexUp] = conjFac * -qureg.stateVec[indexLo].real.imag;
+            qureg.stateVec[indexUp].imag = conjFac *  qureg.stateVec[indexLo].real;
+            qureg.stateVec[indexUp].real = conjFac * -qureg.stateVec[indexLo].imag;
             qureg.stateVec[indexLo].real = conjFac * -stateImagUp;
             qureg.stateVec[indexLo].imag = conjFac * stateRealUp;
         }
@@ -2371,8 +2357,8 @@ void statevec_pauliYDistributed(Qureg qureg, const int targetQubit,
 # pragma omp for schedule (static)
 # endif
         for (thisTask=0; thisTask<numTasks; thisTask++) {
-            stateVecOut[thisTask] = conjFac * realSign * stateVecImagIn[thisTask].real;
-            stateVecOut[thisTask] = conjFac * imagSign * stateVecRealIn[thisTask].imag;
+            stateVecOut[thisTask].real = conjFac * realSign * stateVecIn[thisTask].imag;
+            stateVecOut[thisTask].imag = conjFac * imagSign * stateVecIn[thisTask].real;
         }
     }
 }
@@ -2421,8 +2407,8 @@ void statevec_controlledPauliYLocal(Qureg qureg, const int controlQubit, const i
                 stateImagUp = qureg.stateVec[indexUp].imag;
 
                 // update under +-{{0, -i}, {i, 0}}
-                qureg.stateVec[indexUp] = conjFac * qureg.stateVec[indexLo].imag.real;
-                qureg.stateVec[indexUp] = conjFac * -qureg.stateVec[indexLo].real.imag;
+                qureg.stateVec[indexUp].imag = conjFac * qureg.stateVec[indexLo].real;
+                qureg.stateVec[indexUp].real = conjFac * -qureg.stateVec[indexLo].imag;
                 qureg.stateVec[indexLo].real = conjFac * -stateImagUp;
                 qureg.stateVec[indexLo].imag = conjFac * stateRealUp;
             }
@@ -2457,8 +2443,8 @@ void statevec_controlledPauliYDistributed (Qureg qureg, const int controlQubit, 
         for (thisTask=0; thisTask<numTasks; thisTask++) {
             controlBit = extractBit (controlQubit, thisTask+chunkId*chunkSize);
             if (controlBit){
-                stateVecOut[thisTask] = conjFac * stateVecImagIn[thisTask].real;
-                stateVecOut[thisTask] = conjFac * -stateVecRealIn[thisTask].imag;
+                stateVecOut[thisTask].real = conjFac *  stateVecIn[thisTask].imag;
+                stateVecOut[thisTask].imag = conjFac * -stateVecIn[thisTask].real;
             }
         }
     }
@@ -2783,8 +2769,8 @@ qreal statevec_findProbabilityOfZeroLocal (Qureg qureg,
             thisBlock = thisTask / sizeHalfBlock;
             index     = thisBlock*sizeBlock + thisTask%sizeHalfBlock;
 
-            totalProbability += qureg.stateVec[index]*qureg.stateVec[index].real.real
-                + qureg.stateVec[index]*qureg.stateVec[index].imag.imag;
+            totalProbability += qureg.stateVec[index].real*qureg.stateVec[index].real
+                + qureg.stateVec[index].imag*qureg.stateVec[index].imag;
         }
     }
     return totalProbability;
@@ -2826,8 +2812,8 @@ qreal statevec_findProbabilityOfZeroDistributed (Qureg qureg,
 # pragma omp for schedule  (static)
 # endif
         for (thisTask=0; thisTask<numTasks; thisTask++) {
-            totalProbability += qureg.stateVec[thisTask]*qureg.stateVec[thisTask].real.real
-                + qureg.stateVec[thisTask]*qureg.stateVec[thisTask].imag.imag;
+            totalProbability += qureg.stateVec[thisTask].real*qureg.stateVec[thisTask].real
+                + qureg.stateVec[thisTask].imag*qureg.stateVec[thisTask].imag;
         }
     }
 
@@ -2859,8 +2845,8 @@ void statevec_controlledPhaseFlip (Qureg qureg, const int idQubit1, const int id
         bit1 = extractBit (idQubit1, index+chunkId*chunkSize);
         bit2 = extractBit (idQubit2, index+chunkId*chunkSize);
         if (bit1 && bit2) {
-            qureg.stateVec[index] = - stateVecReal [index].real;
-            qureg.stateVec[index] = - stateVecImag [index].imag;
+            qureg.stateVec[index].real = - qureg.stateVec[index].real;
+            qureg.stateVec[index].imag = - qureg.stateVec[index].imag;
         }
     }
 }
@@ -2891,8 +2877,8 @@ void statevec_multiControlledPhaseFlip(Qureg qureg, int *controlQubits, int numC
 # endif
         for (index=0; index<stateVecSize; index++) {
             if (mask == (mask & (index+chunkId*chunkSize)) ){
-                qureg.stateVec[index] = - stateVecReal [index].real;
-                qureg.stateVec[index] = - stateVecImag [index].imag;
+                qureg.stateVec[index].real = - qureg.stateVec[index].real;
+                qureg.stateVec[index].imag = - qureg.stateVec[index].imag;
             }
         }
     }
@@ -2954,8 +2940,8 @@ void statevec_collapseToKnownProbOutcomeLocal(Qureg qureg, int measureQubit, int
             for (thisTask=0; thisTask<numTasks; thisTask++) {
                 thisBlock = thisTask / sizeHalfBlock;
                 index     = thisBlock*sizeBlock + thisTask%sizeHalfBlock;
-                qureg.stateVec[index]=qureg.stateVec[index].real.real*renorm;
-                qureg.stateVec[index]=qureg.stateVec[index].imag.imag*renorm;
+                qureg.stateVec[index].real = qureg.stateVec[index].real*renorm;
+                qureg.stateVec[index].imag = qureg.stateVec[index].imag*renorm;
 
                 qureg.stateVec[index+sizeHalfBlock].real=0;
                 qureg.stateVec[index+sizeHalfBlock].imag=0;
@@ -2971,8 +2957,8 @@ void statevec_collapseToKnownProbOutcomeLocal(Qureg qureg, int measureQubit, int
                 qureg.stateVec[index].real=0;
                 qureg.stateVec[index].imag=0;
 
-                qureg.stateVec[index+sizeHalfBlock]=qureg.stateVec[index+sizeHalfBlock].real.real*renorm;
-                qureg.stateVec[index+sizeHalfBlock]=qureg.stateVec[index+sizeHalfBlock].imag.imag*renorm;
+                qureg.stateVec[index+sizeHalfBlock].real = qureg.stateVec[index+sizeHalfBlock].real*renorm;
+                qureg.stateVec[index+sizeHalfBlock].imag = qureg.stateVec[index+sizeHalfBlock].imag*renorm;
             }
         }
     }
@@ -3013,8 +2999,8 @@ void statevec_collapseToKnownProbOutcomeDistributedRenorm (Qureg qureg, const in
 # pragma omp for schedule  (static)
 # endif
         for (thisTask=0; thisTask<numTasks; thisTask++) {
-            qureg.stateVec[thisTask] = qureg.stateVec[thisTask].real.real*renorm;
-            qureg.stateVec[thisTask] = qureg.stateVec[thisTask].imag.imag*renorm;
+            qureg.stateVec[thisTask].real = qureg.stateVec[thisTask].real*renorm;
+            qureg.stateVec[thisTask].imag = qureg.stateVec[thisTask].imag*renorm;
         }
     }
 }
