@@ -73,7 +73,7 @@ void statevec_cloneQureg(Qureg targetQureg, Qureg copyQureg) {
 }
 
 __global__ void densmatr_initPureStateKernel(
-    long long int numPureAmps, Complex targetVec, Complex copyVec)
+    long long int numPureAmps, Complex *targetVec, Complex *copyVec)
     /* qreal *targetVecReal, qreal *targetVecImag,  */
     /* qreal *copyVecReal, qreal *copyVecImag)  */
 {
